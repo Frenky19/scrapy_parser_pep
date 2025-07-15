@@ -5,6 +5,7 @@ from datetime import datetime
 from pep_parse.constants import RESULTS_DIR, TIME_FORMAT
 from pep_parse.settings import BASE_DIR
 
+
 class PepParsePipeline:
     def open_spider(self, spider):
         self.status_counts = defaultdict(int)
@@ -19,7 +20,6 @@ class PepParsePipeline:
         timestamp = datetime.now().strftime(TIME_FORMAT)
         filename = f'{self.results_dir}/status_summary_{timestamp}.csv'
         filepath = BASE_DIR / filename
-        
         with open(filepath, 'w', encoding='utf-8', newline='') as f:
             writer = csv.writer(f)
             writer.writerow(['Статус', 'Количество'])
