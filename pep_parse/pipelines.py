@@ -17,14 +17,13 @@ class PepParsePipeline:
         """Инициализация pipeline и создание директории для результатов."""
         self.results_dir = BASE_DIR / RESULTS_DIR
         self.results_dir.mkdir(parents=True, exist_ok=True)
-        self.status_counts = defaultdict(int)
 
     def open_spider(self, spider):
         """Подготовка к работе при запуске паука.
 
-        Сбрасывает счетчик статусов перед началом обработки.
+        Создает счетчик для статусов PEP.
         """
-        self.status_counts.clear()
+        self.status_counts = defaultdict(int)
 
     def process_item(self, item, spider):
         """Обработка каждого элемента PEP.
@@ -46,9 +45,7 @@ class PepParsePipeline:
         filepath = self.results_dir / filename
         data = [
             ['Статус', 'Количество'],
-            *[(status, str(count)) for status, count in sorted(
-                self.status_counts.items()
-            )],
+            *sorted(self.status_counts.items()),
             ['Total', str(total)]
         ]
         with open(filepath, 'w', encoding='utf-8', newline='') as f:
