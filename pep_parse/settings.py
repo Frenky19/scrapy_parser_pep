@@ -1,11 +1,11 @@
 from pathlib import Path
 
-from pep_parse.constants import RESULTS_DIR
+from pep_parse.constants import PROJECT_NAME, RESULTS_DIR
 
-BOT_NAME = 'pep_parse'
+BOT_NAME = PROJECT_NAME
 
-SPIDER_MODULES = ['pep_parse.spiders']
-NEWSPIDER_MODULE = 'pep_parse.spiders'
+SPIDER_MODULES = [f'{PROJECT_NAME}.spiders']
+NEWSPIDER_MODULE = f'{PROJECT_NAME}.spiders'
 
 ROBOTSTXT_OBEY = True
 

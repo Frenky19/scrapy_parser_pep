@@ -12,10 +12,19 @@ class PepParsePipeline:
     Собирает статистику по статусам PEP и сохраняет результаты
     в CSV-файл.
     """
-    def open_spider(self, spider):
-        """Инициализация pipeline при запуске паука."""
+
+    def __init__(self):
+        """Инициализация pipeline и создание директории для результатов."""
+        self.results_dir = BASE_DIR / RESULTS_DIR
+        self.results_dir.mkdir(parents=True, exist_ok=True)
         self.status_counts = defaultdict(int)
-        self.results_dir = RESULTS_DIR
+
+    def open_spider(self, spider):
+        """Подготовка к работе при запуске паука.
+
+        Сбрасывает счетчик статусов перед началом обработки.
+        """
+        self.status_counts.clear()
 
     def process_item(self, item, spider):
         """Обработка каждого элемента PEP.
@@ -35,9 +44,13 @@ class PepParsePipeline:
         timestamp = datetime.now().strftime(TIME_FORMAT)
         filename = f'{self.results_dir}/status_summary_{timestamp}.csv'
         filepath = BASE_DIR / filename
+        data = [
+            ['Статус', 'Количество'],
+            *[(status, str(count)) for status, count in sorted(
+                self.status_counts.items()
+            )],
+            ['Total', str(total)]
+        ]
         with open(filepath, 'w', encoding='utf-8', newline='') as f:
             writer = csv.writer(f)
-            writer.writerow(['Статус', 'Количество'])
-            for status, count in sorted(self.status_counts.items()):
-                writer.writerow([status, count])
-            writer.writerow(['Total', total])
+            writer.writerows(data)
