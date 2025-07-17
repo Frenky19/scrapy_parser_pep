@@ -42,8 +42,8 @@ class PepParsePipeline:
         """
         total = sum(self.status_counts.values())
         timestamp = datetime.now().strftime(TIME_FORMAT)
-        filename = f'{self.results_dir}/status_summary_{timestamp}.csv'
-        filepath = BASE_DIR / filename
+        filename = f'status_summary_{timestamp}.csv'
+        filepath = self.results_dir / filename
         data = [
             ['Статус', 'Количество'],
             *[(status, str(count)) for status, count in sorted(
